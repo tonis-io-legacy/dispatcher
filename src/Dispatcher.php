@@ -88,10 +88,10 @@ final class Dispatcher
         $args = [];
 
         foreach ($reflection->getParameters() as $param) {
-            if (isset($params[$param->getName()])) {
-                $args[] = $params[$param->getName()];
+            if (isset($params[$param->name])) {
+                $args[] = $params[$param->name];
             } elseif (!$param->isOptional()) {
-                throw new Exception\MissingRequiredArgumentException($param->getName());
+                throw new Exception\MissingRequiredArgumentException($param->name);
             }
         }
 
