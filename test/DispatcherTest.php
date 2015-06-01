@@ -1,6 +1,7 @@
 <?php
 
 namespace Tonis\Dispatcher;
+
 use Tonis\Dispatcher\TestAsset\Invokable;
 use Tonis\Dispatcher\TestAsset\TestDispatchable;
 
