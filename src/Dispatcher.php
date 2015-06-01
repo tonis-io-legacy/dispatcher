@@ -35,10 +35,6 @@ final class Dispatcher
      */
     public function dispatchCallable($callable, array $params = [])
     {
-        if (is_string($callable)) {
-            $callable = explode('::', $callable);
-        }
-
         $function = new \ReflectionMethod($callable[0], $callable[1]);
         $args = $this->buildArgsFromReflectionFunction($function, $params);
 
