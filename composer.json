@@ -9,17 +9,17 @@
     "description": "Tonis\\Dispatcher is a light-weight, HHVM compatible, and dependency free dispatching library.",
     "license": "BSD-3-Clause",
     "require": {
-        "php": ">=5.4"
+        "php": ">=5.5"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
+        "scrutinizer/ocular": "^1.1.1",
         "squizlabs/php_codesniffer": "~1.0"
     },
     "autoload": {
         "psr-4": {
             "Tonis\\Dispatcher\\": [
-                "src/",
-                "test/"
+                "src/"
             ]
         }
     },
