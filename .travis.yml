@@ -19,7 +19,7 @@ before_script:
 
 script:
     - cd $TRAVIS_BUILD_DIR
-    - vendor/bin/phpunit -c test/phpunit.xml
+    - vendor/bin/phpunit -c test/phpunit.xml --coverage-clover=./build/clover.xml
     - vendor/bin/phpcs --standard=PSR2 -s -p src/ test/
 
 after_script:
