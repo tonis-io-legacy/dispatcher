@@ -23,6 +23,13 @@
             ]
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Tonis\\Dispatcher\\": [
+                "test/"
+            ]
+        }
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
