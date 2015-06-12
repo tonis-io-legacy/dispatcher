@@ -1,22 +1,21 @@
 language: php
-
 php:
-    - 5.5
-    - 5.6
-    - 7.0
-    - hhvm
-
+- 5.5
+- 5.6
+- 7.0
+- hhvm
 matrix:
-    fast_finish: true
-
+  fast_finish: true
 before_script:
-    - composer self-update
-    - composer install --prefer-source --no-interaction
-
+- composer self-update
+- composer install --prefer-source --no-interaction
 script:
-    - cd $TRAVIS_BUILD_DIR
-    - vendor/bin/phpunit -c test/phpunit.xml --coverage-clover=./build/clover.xml
-    - vendor/bin/phpcs --standard=PSR2 -s -p src/
-
+- cd $TRAVIS_BUILD_DIR
+- vendor/bin/phpunit -c test/phpunit.xml --coverage-clover=./build/clover.xml
+- vendor/bin/phpcs --standard=PSR2 -s -p src/
 after_script:
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.5" ]]; then wget https://scrutinizer-ci.com/ocular.phar; php ocular.phar code-coverage:upload build/clover.xml --format=php-clover; fi
+- if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.5" ]]; then wget https://scrutinizer-ci.com/ocular.phar;
+  php ocular.phar code-coverage:upload build/clover.xml --format=php-clover; fi
+notifications:
+  slack:
+    secure: mvYFe3rB2a6SJmq4oYCrhAljsW5q3GyT9QmNThbQwGztlmkcqVk9n47WZHPBRrTXwg+KkY5B4KAIiSsy8lCEHTzXRcPVo47N7NbqlfBdt+odS4oV6l3bFLLXoaqJNI+BopucySejjiqJoMZZZkANRImvH/TkZ0i1hkyL2M7tgiiSbvDcz36HxwtU5byK1isQw2/46F0V4MDEyNPK8jmzqBBvEXlX0um6n/pBa045ScI6M4x4YRxLk8/2JUxcUygt7zC1x/tdnMuJMnjyohNVwIuTp+f+LHVUi2o9mxmFKVwEksfOSO7auFurN+VmqJKKd+YNrrBQaSGst+7HK/K93tekEwVIbZSeCHwnEjpsh/Vm3IVh68PIRCJyUMTN6OXMVrrVG1yix4Q0VEWOzErI+Jy8CN8tLS/qfnSDXfD4sAAkSmE9imvZ92GB4z4GgGhRQfNPucxX8KdAfHNHvgy1tGywzBOiB/B96cvZ0a9KXDj3aqUbBBNiIJaB6XdixiqjdAxgsQZ6mtfH3MhSNljVo3OQRH6mjT0lawOO4LQieGHtndK9XrJRPjQWmmOJyGKaGAmifkVPRMlJL32iL2rXdZpAiKODtpjofnfniRZe0YK49+JcMAehnNbDrCo7O2s9O8I5XQJon4YMLV97oBmImRcY6aPAjSJ4Q1IaNbyDN7w=
