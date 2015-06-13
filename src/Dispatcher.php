@@ -5,24 +5,24 @@ namespace Tonis\Dispatcher;
 final class Dispatcher
 {
     /**
-     * @param $object
+     * @param mixed $input
      * @param array $params
      * @return mixed
      */
-    public function dispatch($object, array $params = [])
+    public function dispatch($input, array $params = [])
     {
-        if (is_string($object) && class_exists($object)) {
-            $result = new $object();
-        } elseif ($object instanceof \Closure) {
-            $result = $this->dispatchClosure($object, $params);
-        } elseif ($object instanceof Dispatchable) {
-            $result = $this->dispatchDispatchable($object, $params);
-        } elseif (is_object($object) && is_callable($object)) {
-            $result = $this->dispatchInvokable($object, $params);
-        } elseif (is_callable($object)) {
-            $result = $this->dispatchCallable($object, $params);
+        if (is_string($input) && class_exists($input)) {
+            $result = new $input();
+        } elseif ($input instanceof \Closure) {
+            $result = $this->dispatchClosure($input, $params);
+        } elseif ($input instanceof Dispatchable) {
+            $result = $this->dispatchDispatchable($input, $params);
+        } elseif (is_object($input) && is_callable($input)) {
+            $result = $this->dispatchInvokable($input, $params);
+        } elseif (is_callable($input)) {
+            $result = $this->dispatchCallable($input, $params);
         } else {
-            return $object;
+            return $input;
         }
 
         return $this->dispatch($result, $params);
@@ -38,7 +38,7 @@ final class Dispatcher
         $function = new \ReflectionMethod($callable[0], $callable[1]);
         $args = $this->buildArgsFromReflectionFunction($function, $params);
 
-        return $function->invokeArgs(new $function->class, $args);
+        return call_user_func_array($callable, $args);
     }
 
     /**
