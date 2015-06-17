@@ -2,8 +2,28 @@
 
 namespace Tonis\Dispatcher;
 
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+
 final class Dispatcher
 {
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param callable|null $next
+     * @return ResponseInterface
+     */
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
+    {
+        $handler = $request->getAttribute('route.handler');
+        if (null !== $handler) {
+            $params = $request->getAttribute('route.params');
+            $dispatchResult = $this->dispatch($handler, $params ?: []);
+            $request = $request->withAttribute('dispatch.result', $dispatchResult);
+        }
+        return $next ? $next($request, $response) : $response;
+    }
+
     /**
      * @param mixed $input
      * @param array $params

@@ -4,6 +4,8 @@ namespace Tonis\Dispatcher;
 
 use Tonis\Dispatcher\TestAsset\Invokable;
 use Tonis\Dispatcher\TestAsset\TestDispatchable;
+use Zend\Diactoros\Response;
+use Zend\Diactoros\ServerRequestFactory;
 
 /**
  * @coversDefaultClass \Tonis\Dispatcher\Dispatcher
@@ -18,6 +20,47 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->d = new Dispatcher();
+    }
+
+    /**
+     * @covers ::__invoke
+     */
+    public function testMiddlewareWithNoHandler()
+    {
+        $request = $this->newRequest('/');
+        $response = new Response();
+
+        $result = $this->d->__invoke(
+            $request,
+            $response,
+            function($newRequest, $newResponse) use ($request, $response) {
+                $this->assertSame($request, $newRequest);
+                $this->assertSame($response, $newResponse);
+                return true;
+            }
+        );
+        $this->assertTrue($result);
+    }
+
+    /**
+     * @covers ::__invoke
+     */
+    public function testMiddlewareWitHandler()
+    {
+        $request = $this->newRequest('/')->withAttribute('route.handler', 'foo');
+        $response = new Response();
+
+        $result = $this->d->__invoke(
+            $request,
+            $response,
+            function($newRequest, $newResponse) use ($request, $response) {
+                $this->assertNotSame($request, $newRequest);
+                $this->assertSame($response, $newResponse);
+                $this->assertArrayHasKey('dispatch.result', $newRequest->getAttributes());
+                return true;
+            }
+        );
+        $this->assertTrue($result);
     }
 
     /**
@@ -120,5 +163,18 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     public function callableFunction($id, $slug = 'foo')
     {
         return 'id: ' . $id . ', slug: ' . $slug;
+    }
+
+    /**
+     * @param string $path
+     * @param array $server
+     * @return \Zend\Diactoros\ServerRequest
+     */
+    protected function newRequest($path, array $server = [])
+    {
+        $server['REQUEST_URI'] = $path;
+        $server = array_merge($_SERVER, $server);
+
+        return ServerRequestFactory::fromGlobals($server);
     }
 }

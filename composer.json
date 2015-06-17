@@ -12,6 +12,7 @@
         "php": ">=5.5"
     },
     "require-dev": {
+        "zendframework/zend-diactoros": "^1.0",
         "phpunit/phpunit": "^4.0",
         "scrutinizer/ocular": "^1.1.1",
         "squizlabs/php_codesniffer": "^1.0"
